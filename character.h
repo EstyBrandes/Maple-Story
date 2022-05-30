@@ -24,11 +24,14 @@ class Character
     int maxHealthPoints;
 
 public:
+    Character();
     Character(char *_characterName, job _characterJob);
     Character(char *_characterName, job _characterJob, int _healthPoints);
     Character(char *_characterName, job _characterJob, int _healthPoints, int _attackStrength);
     bool attack(Enemy &enemy);
     ~Character();
+    void copy_character(Character &fromCharacter);
+    bool Character_is_empty();
     int get_character_health_points();
     int get_character_attack_points();
     int get_character_experience_points();
