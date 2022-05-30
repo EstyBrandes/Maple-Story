@@ -16,6 +16,18 @@ const int maxHPPirate = 25;
 const int maxATPirate = 25;
 const int initializeEC = 10;
 
+Character::Character()
+{
+    characterName = NULL;
+    return;
+}
+
+bool Character::Character_is_empty()
+{
+    if (characterName == NULL)
+        return true;
+    return false;
+}
 Character::Character(char *_characterName, job _characterJob)
 {
     if (!_characterName)
@@ -25,6 +37,8 @@ Character::Character(char *_characterName, job _characterJob)
     }
     int length = strlen(_characterName);
     characterName = new char[length + 1];
+    if (!characterName)
+        throw;
     strcpy(characterName, _characterName);
 
     characterJob = _characterJob;
@@ -194,6 +208,22 @@ void Character::levelUp()
 {
     level++;
     return;
+}
+
+void Character::copy_character(Character &fromCharacter)
+{
+    int length = strlen(fromCharacter.characterName);
+    characterName = new char[length + 1];
+    if (!characterName)
+        throw;
+    strcpy(characterName, fromCharacter.characterName);
+    attackStrength = fromCharacter.attackStrength;
+    characterJob = fromCharacter.characterJob;
+    experience = fromCharacter.experience;
+    experienceCapacity = fromCharacter.experienceCapacity;
+    level = fromCharacter.level;
+    healthPoints = fromCharacter.healthPoints;
+    maxHealthPoints = fromCharacter.maxHealthPoints;
 }
 
 // when the experience is up
