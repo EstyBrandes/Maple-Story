@@ -6,13 +6,18 @@ class User
 {
     char userName[10];
     char password[10];
-    Character characters[5]; // Notice it’s an array of the next Class
+    Character *characters[5]; // Notice it’s an array of the next Class
+    int numOfCharacters;
+    int indexCharacter;
 
 public:
-    User(char *userName, char *password);
-    User(char *userName, char *password, Character &character);
-    User(char *userName, char *password, Character character[]);
-    bool LogIn(char *userName, char *_password);
+    User(char *_userName, char *_password);
+    User(char *_userName, char *_password, Character &_character);
+    User(char *_userName, char *_password, Character _character[]);
+    bool LogIn(char *_userName, char *_password);
+    void printLevel();
+    void switch_characters();
+    void menu(Enemy &enemy);
     ~User();
 };
 
