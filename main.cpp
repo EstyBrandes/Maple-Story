@@ -26,7 +26,9 @@ int main()
 }
 
 // delete globalUser;
-/*  ~create / destroy user
+/*
     ~ get enemy into array
-    ~ get characters into array
+    ~get characters into array
+
+
 */
