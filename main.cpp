@@ -43,6 +43,7 @@ int main()
 /*
     ~ get enemy into array [Almog: "Done!"]
     ~ get characters into array [Almog: "Done!"]
+    ~ putting the arrays of enemys and characters to use
     ~ Level up: next level is X2 the expirience capacity, Attack power & Health points is X1.5
     ~ manage exeptions in all constractors
     ~ manage exceptions if all functions and methods
