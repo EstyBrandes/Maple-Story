@@ -51,9 +51,16 @@ int main()
 /*
     ~ get enemy into array [Almog: "Done!"]
     ~ get characters into array [Almog: "Done!"]
+    ~ make a function (in enemy.h/cpp) that gets an array of enemies and 
+        returning a referance(&) to the first enemy that isn't dead. and use it in menu(*here*). 
+    ~ make a method to add a character to user (only name & job).
+    ~ [FIX] in Character::get_character_name(char *&name) - if empty - return "No Character"
+    ~ in character.h/cpp - add a function: down_experience(enemy.get_enemy_experience_points());
+    ~ [FIX] bool Character::fight(Enemy &enemy) - 
+        call down_experience() if character lost in a fight.
     ~ Level up: next level is X2 the expirience capacity, Attack power & Health points is X1.5
-    ~ manage exeptions in all constractors
-    ~ manage exceptions if all functions and methods
+    ~ manage exeptions in all constractors (try, throw, catch)
+    ~ manage exceptions if all functions and methods (try, throw, catch)
 
 
 */
