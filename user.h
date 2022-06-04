@@ -13,9 +13,12 @@ class User
 public:
     User(char *_userName, char *_password);
     User(char *_userName, char *_password, Character &_character);
-    User(char *_userName, char *_password, Character _character[]);
+    User(char *_userName, char *_password, Character _character[], int sizeOfCharacters);
     bool LogIn(char *_userName, char *_password);
     void printLevel();
+    void addCharacter(char *_characterName, job _characterJob);
+    int howManyCharacters();
+    void printCharacters();
     void switch_characters();
     void menu(Enemy &enemy);
     ~User();
