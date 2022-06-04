@@ -4,62 +4,52 @@
 
 using namespace std;
 
-Enemy::Enemy(char *EnemyName)
-{
-    // check what is happening when the name is invalid
-    int length = strlen(enemyName);
-    enemyName = new char[length + 1];
-    strcpy(enemyName, EnemyName);
-    healthPoints = 10;
-    attackStrength = 10;
-    experienceWorth = 10;
-    return;
-}
+// Constructors:
 
-Enemy::Enemy(char *EnemyName, int healthPoints)
+Enemy::Enemy(char *EnemyName, int healthPoints = 10, int attackStrength = 10)
 {
+    if (!EnemyName)
+    {
+        throw invalid_argument("Null argument!\n");
+    }
+    if(healthPoints <= 0)
+    {
+        throw invalid_argument("Invalid Health Points! Try Again!\n");
+    }
+    if(attackStrength <= 0)
+    {
+        throw invalid_argument("Invalid Attack Strength! Try Again!\n");
+    }
     int length = strlen(enemyName);
     enemyName = new char[length + 1];
-    strcpy(enemyName, EnemyName);
-    strcpy(enemyName, EnemyName);
-    this->healthPoints = healthPoints;
-    attackStrength = 10;
-    experienceWorth = 10;
-    return;
-}
-
-Enemy::Enemy(char *EnemyName, int healthPoints, int attackStrength)
-{
-    int length = strlen(enemyName);
-    enemyName = new char[length + 1];
-    strcpy(enemyName, EnemyName);
+    if(!enemyName) throw "Memory error!\n";
     strcpy(enemyName, EnemyName);
     this->healthPoints = healthPoints;
     this->attackStrength = attackStrength;
     experienceWorth = 10;
     return;
 }
-// destroy
-Enemy::~Enemy()
-{
-    delete[] enemyName;
-}
+
+// Methodes:
 
 // The way to get the health points of the enemy
 int Enemy::get_enemy_health_points()
 {
     return healthPoints;
 }
+
 // The way to get the attack points of the enemy
 int Enemy::get_enemy_attack_points()
 {
     return attackStrength;
 }
+
 // The way to get the experience points of the enemy
 int Enemy::get_enemy_experience_points()
 {
     return experienceWorth;
 }
+
 // The way to get the name of the enemy
 void Enemy::get_enemy_name(char *&name)
 {
@@ -78,3 +68,25 @@ bool Enemy::down_hp(int damage)
     }
     return false;
 }
+
+// Destructor:
+
+Enemy::~Enemy()
+{
+    delete[] enemyName;
+}
+
+// functions:
+
+Enemy& nextEnemy(Enemy* enemies, int sizeOfArray){
+    for (int i = 0; i < sizeOfArray; i++)
+    {
+        if(enemies[i].get_enemy_health_points() > 0) 
+        {
+            Enemy& monsterToFight = enemies[i];
+            return monsterToFight;
+        }
+    }
+    throw "No more monsters left!\n"; 
+}
+
