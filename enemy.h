@@ -9,9 +9,7 @@ class Enemy
     int experienceWorth;
 
 public:
-    Enemy(char *EnemyName);
-    Enemy(char *EnemyName, int healthPoints);
-    Enemy(char *EnemyName, int healthPoints, int attackStrength);
+    Enemy(char *EnemyName, int healthPoints = 10, int attackStrength = 10);
     ~Enemy();
     int get_enemy_health_points();
     int get_enemy_attack_points();
@@ -19,5 +17,7 @@ public:
     void get_enemy_name(char *&name);
     bool down_hp(int damage);
 };
+
+Enemy& nextEnemy(Enemy* enemies, int sizeOfArray);
 
 #endif
