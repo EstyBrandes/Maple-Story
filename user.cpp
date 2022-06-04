@@ -5,19 +5,7 @@
 
 using namespace std;
 
-bool User::LogIn(char *_userName, char *_password)
-{
-    if (!_userName || !_password)
-        return false;
-
-    int result = strcmp(_userName, userName);
-    if (result != 0)
-        return false;
-    result = strcmp(_password, password);
-    if (result != 0)
-        return false;
-    return true;
-}
+// Constructors:
 
 User::User(char *_userName, char *_password)
 {
@@ -25,6 +13,10 @@ User::User(char *_userName, char *_password)
     strcpy(password, _password);
     numOfCharacters = 0;
     indexCharacter = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        characters[i] = NULL;
+    }
     return;
 }
 
@@ -37,11 +29,12 @@ User::User(char *_userName, char *_password, Character &_character)
     indexCharacter = 0;
     return;
 }
-User::User(char *_userName, char *_password, Character _character[])
+
+User::User(char *_userName, char *_password, Character _character[], int sizeOfCharacters)
 {
     strcpy(userName, _userName);
     strcpy(password, _password);
-    for (int i = 0; i < 5 && _character[i].Character_is_empty() == false; i++)
+    for (int i = 0; i < sizeOfCharacters; i++)
     {
         Character &thisCharacter = _character[i];
         characters[i]->copy_character(thisCharacter);
@@ -49,6 +42,23 @@ User::User(char *_userName, char *_password, Character _character[])
     }
     indexCharacter = 0;
     return;
+}
+
+// Methodes:
+
+bool User::LogIn(char *_userName, char *_password)
+{
+    if (!_userName || !_password)
+        throw invalid_argument("NULL arguments recieved!\n");
+    if (strlen(_userName) > 9 || strlen(_userName) < 1 || strlen(_password) > 9 || strlen(_password) < 1)
+        throw invalid_argument("Username or Password must be 1-9 characters!\n");
+    int result = strcmp(_userName, userName);
+    if (result != 0)
+        return false;
+    result = strcmp(_password, password);
+    if (result != 0)
+        return false;
+    return true;
 }
 
 void User::printLevel()
@@ -60,34 +70,103 @@ void User::printLevel()
 
 void User::switch_characters()
 {
+    if (numOfCharacters < 2)
+    {
+        cout << "\t XX    First, make another character!    XX\n";
+        cout << "Choose character name:\n";
+        char buffer[100];
+        cin >> buffer;
+        buffer[strlen(buffer)+1] = 0;
+        char* characterName;
+        try
+        {
+            characterName = new char[strlen(buffer)+1];
+        }
+        catch(bad_alloc& e)
+        {
+            std::cerr << "memory error!" << endl;
+        }
+        strcpy(characterName, buffer);
+        cout << "Choose job:\n" << "1. Warrior\n2. Magician\n3. Rouge\n4. Archer\n5. Pirate\nType a number between 1-5:";
+        int choice;
+        cin >> choice;
+        choice--;
+        job characterJob = static_cast<job>(choice);
+        try
+        {
+            addCharacter(characterName, characterJob);
+        }
+        catch(char* err)
+        {
+            cerr << err << endl;
+        }       
+    }
+    
     char *charName;
     char *&thisCharacter = charName;
     int theChosen;
     cout << "\t XX Choose Your Character: XX\n";
-    characters[0]->get_character_name(thisCharacter);
-    cout << "1 -" << charName << "\n";
-    characters[1]->get_character_name(thisCharacter);
-    cout << "2 -" << charName << "\n";
-    characters[2]->get_character_name(thisCharacter);
-    cout << "3 -" << charName << "\n";
-    characters[3]->get_character_name(thisCharacter);
-    cout << "4 -" << charName << "\n";
-    characters[4]->get_character_name(thisCharacter);
-    cout << "5 -" << charName << "\n";
+    printCharacters();
 
     cin >> theChosen;
     if (theChosen > 5 || theChosen < 1)
     {
         cout << "No Such Character!\n";
-        throw;
+        throw (theChosen /* int */);
     }
     theChosen--;
     indexCharacter = theChosen;
     return;
 }
 
+void User::printCharacters(){
+    if(numOfCharacters == 0){
+        cout << "No Characters! add a character!\n";
+        return;
+    }
+    char *charName;
+    char *&thisCharacter = charName;
+    for (int i = 0; i < numOfCharacters; i++)
+    {
+        characters[i]->get_character_name(thisCharacter);
+        cout << (i+1) << " -" << charName << "\n";
+    }
+    return;
+}
+
 void User::menu(Enemy &enemy)
 {
+    if(numOfCharacters == 0)
+    {
+        cout << "\t XX    First, make a character!    XX\n";
+        cout << "Choose character name:\n";
+        char buffer[100];
+        cin >> buffer;
+        buffer[strlen(buffer)+1] = 0;
+        char* characterName;
+        try
+        {
+            characterName = new char[strlen(buffer)+1];
+        }
+        catch(bad_alloc& e)
+        {
+            std::cerr << "memory error!" << endl;
+        }
+        strcpy(characterName, buffer);
+        cout << "Choose job:\n" << "1. Warrior\n2. Magician\n3. Rouge\n4. Archer\n5. Pirate\nType a number between 1-5:";
+        int choice;
+        cin >> choice;
+        choice--;
+        job characterJob = static_cast<job>(choice);
+        try
+        {
+            addCharacter(characterName, characterJob);
+        }
+        catch(char* err)
+        {
+            cerr << err << endl;
+        }       
+    }
     cout << "\t XX    MENU:    XX\n";
     cout << "1. Fight!\n";
     cout << "2. Print Level\n";
@@ -107,13 +186,51 @@ void User::menu(Enemy &enemy)
         switch_characters();
         break;
     case 4:
-        throw;
+        throw -1 /* int */;
         break;
     default:
-        cout << "No Such Option! Try Again!\n";
+        throw invalid_argument("No Such Option! Try Again!\n") /* invalid_argument */;
         break;
     }
+    return;
 }
+
+// functions:
+
+int User::howManyCharacters(){
+    int counter = 0;
+    for (int i = 0; i < 5 ; i++)
+    {
+        if (!(characters[i]))
+        {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+void User::addCharacter(char *_characterName, job _characterJob){
+    if(numOfCharacters == 5){
+        throw "too many characters!\n";
+        return;
+    }
+    Character* newCharacter;
+    try
+    {
+        newCharacter = new Character(_characterName, _characterJob);
+    }
+    catch(char* characterError)
+    {
+        cerr << characterError;
+        throw characterError;
+    }
+    characters[numOfCharacters] = newCharacter;
+    numOfCharacters++;
+    return;
+}
+
+// Destructor:
+
 User::~User()
 {
     delete[] userName;
