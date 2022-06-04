@@ -16,29 +16,46 @@ const int maxHPPirate = 25;
 const int maxATPirate = 25;
 const int initializeEC = 10;
 
+
+// Constructors:
+/*
 Character::Character()
 {
     characterName = NULL;
+    characterJob = Warrior;
+    experience = 0;
+    experienceCapacity = 0;
+    level = 0;
+    healthPoints = 0;
     return;
 }
 
-bool Character::Character_is_empty()
+bool Character::()
 {
     if (characterName == NULL)
         return true;
     return false;
 }
+*/
 Character::Character(char *_characterName, job _characterJob)
 {
     if (!_characterName)
     {
-        cout << "Invalid Name! Try Again!\n";
-        return;
+        throw invalid_argument("Invalid Name! Try Again!\n");
+    }
+    if (_characterJob < 0 || _characterJob > 4)
+    {
+        throw invalid_argument("Invalid Job! Try Again!\n");
     }
     int length = strlen(_characterName);
-    characterName = new char[length + 1];
-    if (!characterName)
-        throw;
+    try
+    {
+        characterName = new char[length + 1];
+    } 
+    catch (bad_alloc& badAlloc)
+    {
+        cerr << "No memory: " << badAlloc.what() << endl;
+    }    
     strcpy(characterName, _characterName);
 
     characterJob = _characterJob;
@@ -85,12 +102,20 @@ Character::Character(char *_characterName, job _characterJob)
     cout << "\t XX Character Has Been Created XX\n";
     return;
 }
-Character ::Character(char *_characterName, job _characterJob, int _healthPoints)
+
+Character::Character(char *_characterName, job _characterJob, int _healthPoints)
 {
     if (!_characterName)
     {
-        cout << "Invalid Name! Try Again!\n";
-        return;
+        throw invalid_argument("Invalid Name! Try Again!\n");
+    }
+    if (_characterJob < 0 || _characterJob > 4)
+    {
+        throw invalid_argument("Invalid Job! Try Again!\n");
+    }
+    if(_healthPoints <= 0)
+    {
+        throw invalid_argument("Invalid Health Points! Try Again!\n");
     }
     int length = strlen(_characterName);
     characterName = new char[length + 1];
@@ -138,12 +163,24 @@ Character ::Character(char *_characterName, job _characterJob, int _healthPoints
     cout << "\t XX Character Has Been Created XX\n";
     return;
 }
+
 Character::Character(char *_characterName, job _characterJob, int _healthPoints, int _attackStrength)
 {
     if (!_characterName)
     {
-        cout << "Invalid Name! Try Again!\n";
-        return;
+        throw invalid_argument("Invalid Name! Try Again!\n");
+    }
+    if (_characterJob < 0 || _characterJob > 4)
+    {
+        throw invalid_argument("Invalid Job! Try Again!\n");
+    }
+    if(_healthPoints <= 0)
+    {
+        throw invalid_argument("Invalid Health Points! Try Again!\n");
+    }
+    if(_attackStrength <= 0)
+    {
+        throw invalid_argument("Invalid Attack Strength! Try Again!\n");
     }
     int length = strlen(_characterName);
     characterName = new char[length + 1];
@@ -172,31 +209,53 @@ Character::Character(char *_characterName, job _characterJob, int _healthPoints,
     int experienceCapacity = initializeEC;
     int level = 1;
 }
-Character::~Character()
-{
-    delete[] characterName;
-}
+
+// Methodes:
+
 int Character::get_character_health_points()
 {
     return healthPoints;
 }
+
 int Character::get_character_attack_points()
 {
     return attackStrength;
 }
+
 int Character::get_character_experience_points()
 {
     return experience;
 }
+
 void Character::get_character_name(char *&name)
 {
+    /*
+    if(Character_is_empty()){
+        try{
+            name = (char*)realloc(name, sizeof(char)*13); // "No Character"
+        }
+        catch(bad_alloc){
+            throw "memory error!\n";
+        }
+        strcpy(name, "No Character");
+    }
+    */
+    name = (char*)realloc(name, sizeof(char)*strlen(characterName));
+    try{
+            name = (char*)realloc(name, sizeof(char)*strlen(characterName));
+        }
+        catch(bad_alloc& badAlloc){
+            cerr << "memory error: " << badAlloc.what() << endl;;
+        }
     strcpy(name, characterName);
     return;
 }
+
 int Character::get_character_level()
 {
     return level;
 }
+
 int Character::get_character_experience_capacity()
 {
     return experienceCapacity;
@@ -204,18 +263,25 @@ int Character::get_character_experience_capacity()
 
 // When character level up
 void Character::levelUp()
-
 {
     level++;
+    experienceCapacity = experienceCapacity * 2;
+    healthPoints += (int)(healthPoints/2);
+    attackStrength += (int)(attackStrength/2);
     return;
 }
 
 void Character::copy_character(Character &fromCharacter)
 {
     int length = strlen(fromCharacter.characterName);
-    characterName = new char[length + 1];
-    if (!characterName)
-        throw;
+    try
+    {
+        characterName = new char[length + 1];
+    }
+    catch(bad_alloc& badAlloc)
+    {
+        cerr << "No memory: " << badAlloc.what() << endl;
+    }
     strcpy(characterName, fromCharacter.characterName);
     attackStrength = fromCharacter.attackStrength;
     characterJob = fromCharacter.characterJob;
@@ -238,6 +304,15 @@ void Character::up_experience(int _experience)
         up_experience(0);
         return;
     }
+    return;
+}
+
+void Character::down_experience(int _experience){
+    if(_experience >= experience){
+        experience = 0;
+        return;
+    }
+    experience-=_experience;
     return;
 }
 
@@ -276,9 +351,17 @@ bool Character::fight(Enemy &enemy)
         }
         if (character_get_hit(enemy))
         {
+            down_experience(enemy.get_enemy_experience_points());
             return false;
         }
     }
     up_experience(enemy.get_enemy_experience_points());
     return true;
+}
+
+// Destructor:
+
+Character::~Character()
+{
+    delete[] characterName;
 }
