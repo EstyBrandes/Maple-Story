@@ -15,11 +15,11 @@ int main()
     User* mainUser;
     // Enemies:
     try{
-        Enemy monster1 = Enemy("Goblin", 5, 5);
-        Enemy monster2 = Enemy("Wolf");
-        Enemy monster3 = Enemy("Soldier");
-        Enemy monster4 = Enemy("Ogre", 20);
-        Enemy monster5 = Enemy("Dragon", 30, 12);
+        Enemy monster1 = makeEnemy("Goblin", 5, 5);
+        Enemy monster2 = makeEnemy("Wolf");
+        Enemy monster3 = makeEnemy("Soldier");
+        Enemy monster4 = makeEnemy("Ogre", 20);
+        Enemy monster5 = makeEnemy("Dragon", 30, 12);
         monsters = new Enemy[5] {monster1,monster2, monster3, monster4, monster5}; 
     }
     catch(bad_alloc& badAlloc){
@@ -29,11 +29,11 @@ int main()
 
     // Characters:
     try{
-        Character hero1 = Character("Gojo",Magician);
-        Character hero2 = Character("Itadori",Warrior);
-        Character hero3 = Character("Fushiguro",Pirate);
-        Character hero4 = Character("Kugisaki",Rouge, 40);
-        Character hero5 = Character("Yuta", Archer, 60, 30);
+        Character hero1 = makeCharacter("Gojo",Magician);
+        Character hero2 = makeCharacter("Itadori",Warrior);
+        Character hero3 = makeCharacter("Fushiguro",Pirate);
+        Character hero4 = makeCharacter("Kugisaki",Rouge, 40);
+        Character hero5 = makeCharacter("Yuta", Archer, 60, 30);
         heroes = new Character[5]{hero1, hero2, hero3, hero4, hero5};
     }
     catch(bad_alloc& badAlloc){
