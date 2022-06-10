@@ -6,7 +6,7 @@ using namespace std;
 
 // Constructors:
 
-Enemy::Enemy(char *EnemyName, int healthPoints = 10, int attackStrength = 10)
+Enemy::Enemy(char *EnemyName, int healthPoints, int attackStrength)
 {
     if (!EnemyName)
     {
