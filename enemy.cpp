@@ -90,3 +90,20 @@ Enemy& nextEnemy(Enemy* enemies, int sizeOfArray){
     throw "No more monsters left!\n"; 
 }
 
+Enemy makeEnemy(const char* _name, int health, int attack){
+    try{
+        char* newName = new char[strlen(_name)+1];
+        if(!newName) throw "Memory error!\n";
+        strcpy(newName, _name);
+        newName[strlen(_name)]=0;
+        Enemy newEnemy = Enemy(newName, health, attack);
+        return newEnemy;
+    }
+    catch(invalid_argument err){
+        cerr << err.what() << endl;
+    }
+    catch(const char* err){
+        cerr << err << endl;
+    }
+
+}
