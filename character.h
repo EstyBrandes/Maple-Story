@@ -45,4 +45,6 @@ public:
     bool fight(Enemy &enemy);
 };
 
+Character makeCharacter(const char* _name, job characterJob, int health = 10, int attack = 10);
+
 #endif
