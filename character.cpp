@@ -365,3 +365,21 @@ Character::~Character()
 {
     delete[] characterName;
 }
+
+// functions:
+
+Character makeCharacter(const char* _name, job characterJob, int health, int attack){
+    try{
+        char* newName = new char[strlen(_name)+1];
+        strcpy(newName, _name);
+        newName[strlen(_name)]=0;
+        Character newCharacter = Character(newName, characterJob, health, attack);
+        return newCharacter;
+    }
+    catch(invalid_argument err){
+        cerr << err.what() << endl;
+    }
+    catch(const char* err){
+        cerr << err << endl;
+    }
+}
