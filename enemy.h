@@ -18,6 +18,8 @@ public:
     bool down_hp(int damage);
 };
 
+Enemy makeEnemy(const char* _name, int health = 10, int attack = 10);
+
 Enemy& nextEnemy(Enemy* enemies, int sizeOfArray);
 
 #endif
